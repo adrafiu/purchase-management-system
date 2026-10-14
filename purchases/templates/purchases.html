@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Purchases{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+    <h2>Purchases</h2>
+    <a href="{% url 'purchase_add' %}" class="btn btn-dark">
+        + Add Purchase
+    </a>
+</div>
+
+<form method="get" class="d-flex mb-3">
+    <input type="text" name="q" value="{{ query }}"
+           class="form-control me-2"
+           placeholder="Search product or supplier...">
+    <button class="btn btn-secondary">Search</button>
+</form>
+
+<div class="table-responsive">
+<table class="table table-bordered table-striped bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>Product</th>
+            <th>Supplier</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+            <th>Discount</th>
+            <th>Total</th>
+            <th>Paid</th>
+            <th>Due</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for p in purchases %}
+        <tr>
+            <td>{{ p.product_name }}</td>
+            <td>{{ p.supplier.supplier_name }}</td>
+            <td>{{ p.quantity }}</td>
+            <td>{{ p.unit_price|floatformat:2 }}</td>
+            <td>{{ p.subtotal|floatformat:2 }}</td>
+            <td>{{ p.discount|floatformat:2 }}</td>
+            <td>{{ p.total_amount|floatformat:2 }}</td>
+            <td>{{ p.paid_amount|floatformat:2 }}</td>
+            <td>{{ p.due_amount|floatformat:2 }}</td>
+            <td>{{ p.purchase_date }}</td>
+            <td>
+                <a href="{% url 'purchase_edit' p.id %}"
+                   class="btn btn-sm btn-warning mb-1">Edit</a>
+
+                <a href="{% url 'purchase_delete' p.id %}"
+                   class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="11" class="text-center">
+                No purchases found.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
